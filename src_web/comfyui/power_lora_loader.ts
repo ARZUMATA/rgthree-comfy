@@ -819,7 +819,8 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget<PowerLoraLoaderWidgetValue
     if (event.deltaX) {
       let prop: "strengthTwo" | "strength" = isTwo ? "strengthTwo" : "strength";
       this.haveMouseMovedStrength = true;
-      this.value[prop] = (this.value[prop] ?? 1) + event.deltaX * 0.05;
+      const sign = event.deltaX > 0 ? 1 : event.deltaX < 0 ? -1 : 0;
+      this.value[prop] = (this.value[prop] ?? 1) + sign * 0.05;
     }
   }
 
