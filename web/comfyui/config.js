@@ -134,6 +134,18 @@ const CONFIGURABLE = {
             label: "Autoplay video previews in info dialog.",
             description: "In the info dialog, autoplay video preview images.",
         },
+        {
+            key: "nodes.power_lora_loader.strength_slider_throttle.enabled",
+            type: ConfigType.BOOLEAN,
+            label: "Enable strength slider throttle",
+            description: "Throttle mouse-move updates on the strength slider to prevent rapid value changes during fast movement.",
+        },
+        {
+            key: "nodes.power_lora_loader.strength_slider_throttle.delay_ms",
+            type: ConfigType.NUMBER,
+            label: "Throttle delay (ms)",
+            description: "Minimum time between strength updates when moving mouse. Lower values = smoother but more frequent updates.",
+        },
     ],
     advanced: [
         {
