@@ -822,13 +822,21 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget<PowerLoraLoaderWidgetValue
       this.haveMouseMovedStrength = true;
       
       // Throttle updates to prevent excessive calls during fast mouse movement
-      if (this.strengthMoveTimeout) return;
+      // Determine throttle delay based on config (0 = disabled, non-zero = enabled with delay)
+      const throttleEnabled = CONFIG_SERVICE.getConfigValue("nodes.power_lora_loader.strength_slider_throttle.enabled");
+      const throttleDelay = throttleEnabled
+        ? (CONFIG_SERVICE.getConfigValue("nodes.power_lora_loader.strength_slider_throttle.delay_ms") || 50)
+        : 0;
       
+      // Skip if throttling is active and delay > 0
+      if (throttleDelay > 0 && this.strengthMoveTimeout) return;
+      
+      // Always use setTimeout - when throttleDelay = 0 it executes immediately
       this.strengthMoveTimeout = setTimeout(() => {
         const sign = event.deltaX > 0 ? 1 : event.deltaX < 0 ? -1 : 0;
         this.value[prop] = (this.value[prop] ?? 1) + sign * 0.05;
         this.strengthMoveTimeout = null;
-      }, 50); // 50ms throttle for smoother, less frequent updates
+      }, throttleDelay);
     }
   }
 
