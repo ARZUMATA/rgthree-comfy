@@ -360,6 +360,7 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget {
         super(name);
         this.type = "custom";
         this.haveMouseMovedStrength = false;
+        this.strengthMoveTimeout = null;
         this.loraInfoPromise = null;
         this.loraInfo = null;
         this.showModelAndClip = null;
@@ -563,8 +564,15 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget {
         if (event.deltaX) {
             let prop = isTwo ? "strengthTwo" : "strength";
             this.haveMouseMovedStrength = true;
-            const sign = event.deltaX > 0 ? 1 : event.deltaX < 0 ? -1 : 0;
-            this.value[prop] = ((_c = this.value[prop]) !== null && _c !== void 0 ? _c : 1) + sign * 0.05;
+            
+            // Throttle updates to prevent excessive calls during fast mouse movement
+            if (this.strengthMoveTimeout) return;
+            
+            this.strengthMoveTimeout = setTimeout(() => {
+                const sign = event.deltaX > 0 ? 1 : event.deltaX < 0 ? -1 : 0;
+                this.value[prop] = ((_c = this.value[prop]) !== null && _c !== void 0 ? _c : 1) + sign * 0.05;
+                this.strengthMoveTimeout = null;
+            }, 50); // 50ms throttle for smoother, less frequent updates
         }
     }
     onStrengthValUp(event, pos, node) {
@@ -583,6 +591,10 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget {
     onMouseUp(event, pos, node) {
         super.onMouseUp(event, pos, node);
         this.haveMouseMovedStrength = false;
+        if (this.strengthMoveTimeout) {
+            clearTimeout(this.strengthMoveTimeout);
+            this.strengthMoveTimeout = null;
+        }
     }
     showLoraInfoDialog() {
         if (!this.value.lora || this.value.lora === "None") {

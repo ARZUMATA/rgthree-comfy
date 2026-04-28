@@ -542,6 +542,7 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget<PowerLoraLoaderWidgetValue
 
   /** Whether the strength has changed with mouse move (to cancel mouse up). */
   private haveMouseMovedStrength = false;
+  private strengthMoveTimeout: ReturnType<typeof setTimeout> | null = null;
   private loraInfoPromise: Promise<RgthreeModelInfo | null> | null = null;
   private loraInfo: RgthreeModelInfo | null = null;
 
@@ -819,8 +820,15 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget<PowerLoraLoaderWidgetValue
     if (event.deltaX) {
       let prop: "strengthTwo" | "strength" = isTwo ? "strengthTwo" : "strength";
       this.haveMouseMovedStrength = true;
-      const sign = event.deltaX > 0 ? 1 : event.deltaX < 0 ? -1 : 0;
-      this.value[prop] = (this.value[prop] ?? 1) + sign * 0.05;
+      
+      // Throttle updates to prevent excessive calls during fast mouse movement
+      if (this.strengthMoveTimeout) return;
+      
+      this.strengthMoveTimeout = setTimeout(() => {
+        const sign = event.deltaX > 0 ? 1 : event.deltaX < 0 ? -1 : 0;
+        this.value[prop] = (this.value[prop] ?? 1) + sign * 0.05;
+        this.strengthMoveTimeout = null;
+      }, 50); // 50ms throttle for smoother, less frequent updates
     }
   }
 
@@ -842,6 +850,10 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget<PowerLoraLoaderWidgetValue
   override onMouseUp(event: CanvasPointerEvent, pos: Vector2, node: TLGraphNode): boolean | void {
     super.onMouseUp(event, pos, node);
     this.haveMouseMovedStrength = false;
+    if (this.strengthMoveTimeout) {
+      clearTimeout(this.strengthMoveTimeout);
+      this.strengthMoveTimeout = null;
+    }
   }
 
   showLoraInfoDialog() {
