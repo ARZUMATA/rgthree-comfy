@@ -58,7 +58,9 @@
     },
     "power_lora_loader": {
       "show_info_badge": true,
-      "info_autoplay_video": true
+      "info_autoplay_video": true,
+      "strength_slider_throttle": true,
+      "strength_slider_throttle_delay_ms": 50
     }
   },
   "announcements": {
