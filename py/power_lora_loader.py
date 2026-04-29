@@ -54,7 +54,9 @@ class RgthreePowerLoraLoader:
           lora = get_lora_by_filename(value['lora'], log_node=self.NAME)
           if model is not None and lora is not None:
             model, clip = LoraLoader().load_lora(model, clip, lora, strength_model, strength_clip)
-
+          else:
+            raise ValueError(f"Unable to find lora with name '{value['lora']}'")
+          
     return (model, clip)
 
   @classmethod
