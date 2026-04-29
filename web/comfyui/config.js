@@ -129,13 +129,13 @@ const CONFIGURABLE = {
             description: "Show an info badge/button on each lora row to signal and open lora details.",
         },
         {
-            key: "nodes.power_lora_loader.strength_slider_throttle.enabled",
+            key: "nodes.power_lora_loader.strength_slider_throttle",
             type: ConfigType.BOOLEAN,
             label: "Enable strength slider throttle",
             description: "Throttle mouse-move updates on the strength slider to prevent rapid value changes during fast movement.",
         },
         {
-            key: "nodes.power_lora_loader.strength_slider_throttle.delay_ms",
+            key: "nodes.power_lora_loader.strength_slider_throttle_delay_ms",
             type: ConfigType.NUMBER,
             label: "Throttle delay (ms)",
             description: "Minimum time between strength updates when moving mouse. Lower values = smoother but more frequent updates.",

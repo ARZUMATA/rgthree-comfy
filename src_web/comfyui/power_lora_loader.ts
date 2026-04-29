@@ -823,9 +823,9 @@ class PowerLoraLoaderWidget extends RgthreeBaseWidget<PowerLoraLoaderWidgetValue
       
       // Throttle updates to prevent excessive calls during fast mouse movement
       // Determine throttle delay based on config (0 = disabled, non-zero = enabled with delay)
-      const throttleEnabled = CONFIG_SERVICE.getConfigValue("nodes.power_lora_loader.strength_slider_throttle.enabled");
+      const throttleEnabled = CONFIG_SERVICE.getConfigValue("nodes.power_lora_loader.strength_slider_throttle");
       const throttleDelay = throttleEnabled
-        ? (CONFIG_SERVICE.getConfigValue("nodes.power_lora_loader.strength_slider_throttle.delay_ms") || 50)
+        ? (CONFIG_SERVICE.getConfigValue("nodes.power_lora_loader.strength_slider_throttle_delay_ms") || 50)
         : 0;
       
       // Skip if throttling is active and delay > 0
